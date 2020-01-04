@@ -21,7 +21,6 @@
   # init_beta = runif(0,1)
   # iterations = 40,000 with 25,000 burnin
   # a = binar search, around 35%
-  # df = 5
   BMAR <- function( Data, order = 1){ 
     
     #-----------------------------------------------
@@ -45,25 +44,25 @@
     r.b_a = 1
     l.b_a = 0
     
-    tem_target = quick_accept_rate(y, order, a, 1000, init_beta)
+    tem_target = quick_accept_rate(y, order, a, 25000, init_beta)
     
     # ensure right bound of a is large enough
-    while(tem_target > 0.5){
+    while(tem_target > 0.45){
       r.b_a = r.b_a + 1
       a = r.b_a
-      tem_target = quick_accept_rate(y, order, a, 1000, init_beta)
+      tem_target = quick_accept_rate(y, order, a, 25000, init_beta)
     }
     
     # find optim a by binary search
-    while( abs(tem_target - 0.35) > 0.05 ){
-      if( tem_target > 0.4 ){
+    while( abs(tem_target - 0.35) > 0.10 ){
+      if( tem_target > 0.45 ){
         l.b_a = a
         a = (a + r.b_a)
-        tem_target = quick_accept_rate(y, order, a, 1000, init_beta)
+        tem_target = quick_accept_rate(y, order, a, 25000, init_beta)
       }else{
         r.b_a = a
         a = (a + l.b_a)/2
-        tem_target = quick_accept_rate(y, order, a, 1000, init_beta)
+        tem_target = quick_accept_rate(y, order, a, 25000, init_beta)
       }
     }
     
@@ -82,25 +81,25 @@
     r.b_a = 1
     l.b_a = 0
     
-    tem_target = quick_accept_rate(y, order, a, 1000, RW_initial)
+    tem_target = quick_accept_rate(y, order, a, 10000, RW_initial)
     
     # ensure right bound of a is large enough
-    while(tem_target > 0.5){
+    while(tem_target > 0.45){
       r.b_a = r.b_a + 1
       a = r.b_a
-      tem_target = quick_accept_rate(y, order, a, 1000, RW_initial)
+      tem_target = quick_accept_rate(y, order, a, 10000, RW_initial)
     }
     
     # find optim a by binary search
-    while( abs(tem_target - 0.3) > 0.05 ){
-      if( tem_target > 0.35 ){
+    while( abs(tem_target - 0.35) > 0.10 ){
+      if( tem_target > 0.45 ){
         l.b_a = a
         a = (a + r.b_a)
-        tem_target = quick_accept_rate(y, order, a, 1000, RW_initial)
+        tem_target = quick_accept_rate(y, order, a, 10000, RW_initial)
       }else{
         r.b_a = a
         a = (a + l.b_a)/2
-        tem_target = quick_accept_rate(y, order, a, 1000, RW_initial)
+        tem_target = quick_accept_rate(y, order, a, 10000, RW_initial)
       }
     }
     
@@ -135,7 +134,7 @@
   #-----------------------------------------------
   #   using t-proposal
   #   beta_{proposal} = beta_{last period} + t
-  #   where t ~ t(5)
+  #   where t ~ uniform(-0.1,0.1)
   #  
   #   input row vector \beta
   #   parameter a
@@ -147,7 +146,7 @@
     param <- matrix(param, 1, order)
     
     # update proposal
-    param = param + t(diag(a,order)%*%rt(order,5))
+    param = param + t(diag(a,order)%*%runif(order,-0.1,0.1))
     
     return(param)
   }
@@ -230,44 +229,26 @@
     return(t)
   }
   
-
-  #-----------------------------------------------
-  #       BIC_BMAR
-  #-----------------------------------------------
-
-  # input Data, max order
-  # using BIC select order automatically, by grid search
-
-  BIC_BMAR = function( Data, max_order = 10){
-
-    tem_beta = list()
-    tem_ar = list()
-    BIC = matrix(0,1,max_order)
-
-    for(j in 1:max_order){
-      
-      # estimate Data with order j
-      results = BMAR(Data, j)
-      # record results
-      tem_beta = c(tem_beta, list(results[[1]][3,]))
-      tem_ar = c(tem_ar, list(results[[2]]))
-
-      # calculate BIC
-      # BIC = n*log(sigma) - p/2*log(n)
-      # where sigma = n^{-1} |sum[y_t] - x\theta]|
-      p = (j+1)
-      n = length(Data)
-      Y= matrix(1, p, n-p+1)
-      for( i_row in 2:p){
-        Y[i_row,] = Data[(n-i_row+1):(p-i_row+1)]
-      }
-      sigma = sum( abs( Data[n:p] - tem_beta[[j]] %*% Y ) )/(n-p+1)
-      BIC[1,max_order] = (n-p+1)*log(sigma) - (p)/2*log((n-p+1)) 
-    }
-    order = which.min(BIC)
-
-    res = list(order, tem_beta[[order]], tem_ar[[order]])
-    return(res)
-  }
   
+  #---------------------------------------
+  #   BMAR_predict
+  #---------------------------------------
+  
+  # input： 
+  #      data, beta, predict-step
+  # output prediction
+  
+  BMAR_pred = function( Data, beta, step = 1){
+    p = length(beta)
+    y = as.matrix(Data[ length(Data) : (length(Data) - p)])
+    tem_y = as.matrix(c(1,y))
+    Forecast = matrix(0,1,step)
+    
+    for(i in 1:step){
+      Forecast[1,i] = t(b) %*% tem_y[1:p]
+      y = rbind(Forecast[1,i],y)
+      tem_y = as.matrix( c(1,y))
+    }
+    return(Forecast)
+  }
 }
