@@ -114,7 +114,7 @@ apply( abs(tem - r), 2, mean)
 # prediction for BayesMAR_BMA
 tem[,1] <- BayesMAR_BMA[,1] + tr[162:196,2]
 for( h in 1:3){ # (h+1)-step ahead prediction
-  tem[,(1+h)] = BayesMAR_BMA[,(1+j)]+tem[,h]
+  tem[,(1+h)] = BayesMAR_BMA[,(1+h)]+tem[,h]
 }
 # RMSE and MAE for BayesMAR_BMA
 sqrt(apply((tem - r)^2,2,mean))
