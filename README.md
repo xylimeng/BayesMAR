@@ -87,6 +87,8 @@ bic = BIC[1,]
 exp_bic = exp(-bic/2)
 weights = exp_bic/sum(exp_bic)
 
+# preidciton at time i, j-step head
+# = sum( preidciton_order_p * weights_order_p )
 BayesMAR_BMA = matrix(0, 35, 4)
 for( i in 1:35){
   for( j in 1:4){
