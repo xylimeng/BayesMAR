@@ -4,9 +4,7 @@ Bayesian Median Autoregressive model for time series forecasting
 
 ## Example 
 
-Refer to the R script ```BayesMAR.R```. 
-
-Computational time may be different due to sample size and settings insides BayesMAR.R, e.g. numbers of iterations, acceptance region of auto-tuning (binary search) and etc
+Note: Computational time depends on the sample size and settings for MCMC, e.g. the number of iterations, acceptance region of auto-tuning (binary search), etc.
 
 ```r
 source('BayesMAR.R')
@@ -38,18 +36,18 @@ results[4]
 BMAR_pred(yt,results[[1]][3,],4)
 
 #------------------------------------------------------------------
-#  Example 2 Replication of TBR data
+#  Example 2 Replication of 3-Month Treasury Bill: secondary market Rate (TBR) data
 #  Including BIC, Bayes_MAP and Bayes_BMA
 #------------------------------------------------------------------
-# We save results of step 1. for easy reference.
-# the following codes return BayesMAR prediction array
-
+# We save results of step 1 for easy reference.
+# the following code returns BayesMAR prediction array
 # fp[ time = 1:35, BayesMAR_order = 1:20, step_ahead = 1:4 ]
 load("~/Desktop/tem/TBR_BayesMAR_forecast.RData")
 
 # 1. BayesMAR prediction
 # could be skipped by loading the .RData file above
-# read data, generate matrix to store
+# 
+# read data & generate matrix 'f' to store results 
 diffr <- as.matrix(read.csv("diffr.csv"))[,2]
 f <- matrix(0,35,4)
 # recursive forecast, via each oder
@@ -88,8 +86,6 @@ bic = BIC[1,]
 exp_bic = exp(-bic/2)
 weights = exp_bic/sum(exp_bic)
 
-# preidciton at time i, j-step head
-# = sum( preidciton_order_p * weights_order_p )
 BayesMAR_BMA = matrix(0, 35, 4)
 for( i in 1:35){
   for( j in 1:4){
