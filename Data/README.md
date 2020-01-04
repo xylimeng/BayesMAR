@@ -3,7 +3,7 @@ Data used in real data application, collected on Aug 9th 2018
 
 ## Producer Price Index 
 - tp.csv: Raw data shown in Figure 2.
-- diffp,csv: Lagged data of order one $(y_t - y_{t-1})$
+- diffp,csv: Lagged data of order one $$(y_t - y_{t-1})$$
 - source: https://fred.stlouisfed.org/series/PPIACO
 
 ## Treasury Bill Rate
