@@ -6,12 +6,10 @@ Bayesian Median Autoregressive model for time series forecasting
 
 Note: Computational time depends on the sample size and settings for MCMC, e.g. the number of iterations, acceptance region of auto-tuning (binary search), etc.
 
+
+### Example 1. Simulation
 ```r
 source('BayesMAR.R')
-
-#------------------------------------------------------------------
-#  Example 1 Simulation
-#------------------------------------------------------------------
 
 # simulated data
 yt = matrix(0,202,1)
@@ -34,36 +32,35 @@ results[4]
 
 # 4-step ahead prediction
 BMAR_pred(yt,results[[1]][3,],4)
+```
 
-#------------------------------------------------------------------
-#  Example 2. 3-Month Treasury Bill: secondary market Rate (TBR) data
-#  Including BIC, Bayes_MAP and Bayes_BMA
-#------------------------------------------------------------------
+### Example 2. 3-Month Treasury Bill: secondary market Rate (TBR) data
+
+
+```r 
+#  We demonstrate how to use BIC to implement Bayes_MAP and Bayes_BMA in this example. 
 
 # 1. BayesMAR prediction
-# We save results of step 1 into "TBR_BayesMAR_forecast.RData" for easy reference.
-# Skip Step 1 by loading the .RData file 
+# We have saved results of step 1 (i.e., the variable "fp") into "TBR_BayesMAR_forecast.RData" for easy reference.
+# "fp" stores the array of prediction: fp[ time = 1:35, BayesMAR_order = 1:20, step_ahead = 1:4 ]
+# Skip the rest of Step 1 by loading the .RData file 
 load("TBR_BayesMAR_forecast.RData")
-# the following code returns BayesMAR prediction array
-# fp[ time = 1:35, BayesMAR_order = 1:20, step_ahead = 1:4 ]
 
 # Otherwise, run the following code: 
 # read data & generate matrix 'f' to store results 
 diffr <- as.matrix(read.csv("diffr.csv"))[,2]
-f <- matrix(0,35,4)
+f <- array(NA, c(35, 20, 4))
 # recursive forecast, via each oder
-for( BMAR_order in 1:20){
-  for (k in 1:35){
-    # recursively get data
-    y <- diffr[1:(160+k)]
-    # forecast
-    r <- BMAR( y, BMAR_order)
-    f[k,] <- BMAR_pred( y, r[[1]][3,] , 4)
+for( p in 1:20){ # order in BayesMAR
+  for (k in 1:35){ # timepoints for recursive forecasting 
+    for (h in 1:4){ # h-step ahead prediction 
+      # recursively get data
+      y <- diffr[1:(160+k)]
+      # forecast
+      r <- BMAR(y, p)
+      fp[k,p,h] <- BMAR_pred( y, r[[1]][3,] , h)
   }
-  # save data
-  write.csv( f, file = paste('diffr_order_',BMAR_order,'.csv',sep=''))
 }
-
 
 # 2. BIC
 BIC = matrix(0,35,20)
