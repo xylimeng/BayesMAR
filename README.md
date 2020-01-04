@@ -6,6 +6,11 @@ Bayesian Median Autoregressive model for time series forecasting
 
 Refer to the R script ```BayesMAR.R```. 
 ```r
+# Example 1 simulation
+# computational time may be different depending on
+# sample size and settings insides BayesMAR.R
+# e.g. numbers of iterations, acceptance region of auto-tuning
+
 source('BayesMAR.R')
 # simulated data
 yt = matrix(0,202,1)
@@ -25,13 +30,4 @@ results[2]
 results[3]
 # list[[4]] chain after burn-in
 results[4]
-
-# additional comparison to exsiting QAR
-library(quantreg)
-library(zoo)
-data = cbind( yt[3:200], yt[2:199], yt[1:198])
-name = c('y','y1','y2')
-data = split(data, rep( 1:ncol(data), each = nrow(data)))
-names(data) = name
-qar = dynrq(y~y1+y2, tau = 0.5, data = data)
 ```
