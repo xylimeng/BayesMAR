@@ -67,10 +67,10 @@ for( p in 1:20){ # order in BayesMAR
 # 2. BIC
 BIC = matrix(0,35,20)
 # recursive data, via order
-for( k in 1:35){
+for( k in 1:35){ # timepoints for recursive forecasting
   y = diffr[1:(160+k)]
-  for( BMAR_order in 1:20){
-    BIC[k,BMAR_order] = BMAR_BIC(y,BMAR_order,20)
+  for( p in 1:20){ # order in BayesMAR
+    BIC[k,p] = BMAR_BIC(y,p,20)
   }
 }
 
@@ -86,9 +86,9 @@ exp_bic = exp(-bic/2)
 weights = exp_bic/sum(exp_bic)
 
 BayesMAR_BMA = matrix(0, 35, 4)
-for( i in 1:35){
-  for( j in 1:4){
-    BayesMAR_BMA[i,j] = sum( fp[i,,j]* weights)
+for( k in 1:35){ # timepoints for recursive forecasting
+  for( h in 1:4){ # h-step ahead prediction
+    BayesMAR_BMA[k,h] = sum( fp[k,,h]* weights)
   }
 }
 
@@ -96,16 +96,16 @@ for( i in 1:35){
 # read raw data tr / predict target r
 tr <- read.csv(paste('tr.csv',sep=''))
 r <- matrix(0,35,4)
-for(i in 1:4){
-  r[,i] <- tr[(162+i):(196+i),2]
+for(h in 1:4){ # h-step ahead true data
+  r[,h] <- tr[(162+h):(196+h),2]
 }
 
 # prediction = previous raw data + predictive changes
 # prediction for BayesMAR_MAP
 tem <- matrix(0,35,4)
 tem[,1] <- BayesMAR_MAP[,1] + tr[162:196,2]
-for( j in 1:3){
-  tem[,(1+j)] = BayesMAR_MAP[,(1+j)]+tem[,j]
+for( h in 1:3){ # (h+1)-step ahead prediction
+  tem[,(1+h)] = BayesMAR_MAP[,(1+h)]+tem[,h]
 }
 # RMSE and MAE for BayesMAR_MAP
 sqrt(apply((tem - r)^2,2,mean))
@@ -113,8 +113,8 @@ apply( abs(tem - r), 2, mean)
 
 # prediction for BayesMAR_BMA
 tem[,1] <- BayesMAR_BMA[,1] + tr[162:196,2]
-for( j in 1:3){
-  tem[,(1+j)] = BayesMAR_BMA[,(1+j)]+tem[,j]
+for( h in 1:3){ # (h+1)-step ahead prediction
+  tem[,(1+h)] = BayesMAR_BMA[,(1+j)]+tem[,h]
 }
 # RMSE and MAE for BayesMAR_BMA
 sqrt(apply((tem - r)^2,2,mean))
