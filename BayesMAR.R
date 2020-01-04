@@ -245,7 +245,7 @@
     Forecast = matrix(0,1,step)
     
     for(i in 1:step){
-      Forecast[1,i] = t(b) %*% tem_y[1:p]
+      Forecast[1,i] = t(beta) %*% tem_y[1:p]
       y = rbind(Forecast[1,i],y)
       tem_y = as.matrix( c(1,y))
     }
