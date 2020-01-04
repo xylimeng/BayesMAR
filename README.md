@@ -49,7 +49,7 @@ source('BayesMAR.R')
 load("TBR_BayesMAR_forecast.RData")
 
 # Otherwise, run the following code: 
-# read data & generate matrix 'f' to store results 
+# read data & generate array 'fp' to store predictions  
 diffr <- as.matrix(read.csv("diffr.csv"))[,2]
 fp <- array(NA, c(35, 20, 4))
 # recursive forecast, via each oder
