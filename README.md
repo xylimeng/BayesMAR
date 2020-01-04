@@ -85,4 +85,5 @@ for( i in 1:20){
 }
 # find the optimum order
 which.min(BIC)
+
 ```
