@@ -39,6 +39,7 @@ BMAR_pred(yt,results[[1]][3,],4)
 
 #------------------------------------------------------------------
 #  Example 2 Replication of TBR data
+#  Including BIC, Bayes_MAP and Bayes_BMA
 #------------------------------------------------------------------
 # We save results of step 1. for easy reference.
 # the following codes return BayesMAR prediction array
