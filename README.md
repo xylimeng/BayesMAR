@@ -55,13 +55,11 @@ fp <- array(NA, c(35, 20, 4))
 # recursive forecast, via each oder
 for( p in 1:20){ # order in BayesMAR
   for (k in 1:35){ # timepoints for recursive forecasting 
-    for (h in 1:4){ # h-step ahead prediction 
       # recursively get data
       y <- diffr[1:(160+k)]
       # forecast
       r <- BMAR(y, p)
-      fp[k,p,h] <- BMAR_pred( y, r[[1]][3,] , h)
-    }
+      fp[k,p,h] <- BMAR_pred( y, r[[1]][3,], 4)
   }
 }
 
