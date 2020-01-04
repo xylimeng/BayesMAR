@@ -7,6 +7,7 @@ Bayesian Median Autoregressive model for time series forecasting
 Refer to the R script ```BayesMAR.R```. 
 
 Computational time may be different due to sample size and settings insides BayesMAR.R, e.g. numbers of iterations, acceptance region of auto-tuning (binary search) and etc
+
 ```r
 source('BayesMAR.R')
 
@@ -32,6 +33,9 @@ results[2]
 results[3]
 # list[[4]] chain after burn-in
 results[4]
+
+# 4-step ahead prediction
+BMAR_pred(yt,results[[1]][3,],4)
 
 #------------------------------------------------------------------
 #  Example 2 BIC
