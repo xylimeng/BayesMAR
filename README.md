@@ -43,6 +43,7 @@ BMAR_pred(yt,results[[1]][3,],4)
 #------------------------------------------------------------------
 # We save results of step 1. for easy reference.
 # the following codes return BayesMAR prediction array
+
 # fp[ time = 1:35, BayesMAR_order = 1:20, step_ahead = 1:4 ]
 load("~/Desktop/tem/TBR_BayesMAR_forecast.RData")
 
