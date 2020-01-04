@@ -26,6 +26,12 @@
   # iterations = 40,000 with 25,000 burnin
   # a = binar search, around 35% \pm 10%
   
+  # A binary search algorithm is used to achieve tuning-free
+  # A long-burnin period is used to ensure convergence
+  # They are convenient for auto-recursive forecast, but will
+  # hugely increase non-necessarily computational burnden.
+  # Please manually change them if necessary 
+  
   BMAR <- function( Data, order = 1){ 
     
     #-----------------------------------------------
