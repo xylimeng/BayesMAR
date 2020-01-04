@@ -80,8 +80,7 @@ p = which.min(BIC[1,])
 BayesMAR_MAP = fp[,p,]
 
 # 4. BayesMAR - BMA
-# decided by the BIC at the beginning period 
-# calculate weight
+# model weight determined by the BIC value at the beginning period 
 bic = BIC[1,]
 exp_bic = exp(-bic/2)
 weights = exp_bic/sum(exp_bic)
