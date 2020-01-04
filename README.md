@@ -47,6 +47,7 @@ BMAR_pred(yt,results[[1]][3,],4)
 load("~/Desktop/tem/TBR_BayesMAR_forecast.RData")
 
 # 1. BayesMAR prediction
+# could be skipped by loading the .RData file above
 # read data, generate matrix to store
 diffr <- as.matrix(read.csv("diffr.csv"))[,2]
 f <- matrix(0,35,4)
