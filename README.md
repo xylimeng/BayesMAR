@@ -32,6 +32,7 @@ results[4]
 
 # 4-step ahead prediction
 BMAR_pred(yt,results[[1]][3,],4)
+# return 1:h=4 ahead predicitons
 ```
 
 ### Example 2. Real data application using 3-Month Treasury Bill: secondary market Rate (TBR) data
