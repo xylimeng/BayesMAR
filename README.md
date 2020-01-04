@@ -36,17 +36,18 @@ results[4]
 BMAR_pred(yt,results[[1]][3,],4)
 
 #------------------------------------------------------------------
-#  Example 2 Replication of 3-Month Treasury Bill: secondary market Rate (TBR) data
+#  Example 2. 3-Month Treasury Bill: secondary market Rate (TBR) data
 #  Including BIC, Bayes_MAP and Bayes_BMA
 #------------------------------------------------------------------
-# We save results of step 1 for easy reference.
-# the following code returns BayesMAR prediction array
-# fp[ time = 1:35, BayesMAR_order = 1:20, step_ahead = 1:4 ]
-load("~/Desktop/tem/TBR_BayesMAR_forecast.RData")
 
 # 1. BayesMAR prediction
-# could be skipped by loading the .RData file above
-# 
+# We save results of step 1 into "TBR_BayesMAR_forecast.RData" for easy reference.
+# Skip Step 1 by loading the .RData file 
+load("TBR_BayesMAR_forecast.RData")
+# the following code returns BayesMAR prediction array
+# fp[ time = 1:35, BayesMAR_order = 1:20, step_ahead = 1:4 ]
+
+# Otherwise, run the following code: 
 # read data & generate matrix 'f' to store results 
 diffr <- as.matrix(read.csv("diffr.csv"))[,2]
 f <- matrix(0,35,4)
