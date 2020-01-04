@@ -34,11 +34,13 @@ results[4]
 BMAR_pred(yt,results[[1]][3,],4)
 ```
 
-### Example 2. 3-Month Treasury Bill: secondary market Rate (TBR) data
+### Example 2. Real data application using 3-Month Treasury Bill: secondary market Rate (TBR) data
 
 
 ```r 
 #  We demonstrate how to use BIC to implement Bayes_MAP and Bayes_BMA in this example. 
+
+source('BayesMAR.R')
 
 # 1. BayesMAR prediction
 # We have saved results of step 1 (i.e., the variable "fp") into "TBR_BayesMAR_forecast.RData" for easy reference.
