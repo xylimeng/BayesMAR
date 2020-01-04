@@ -61,6 +61,7 @@ for( p in 1:20){ # order in BayesMAR
       # forecast
       r <- BMAR(y, p)
       fp[k,p,h] <- BMAR_pred( y, r[[1]][3,] , h)
+    }
   }
 }
 
