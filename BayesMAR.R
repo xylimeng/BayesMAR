@@ -1,4 +1,8 @@
 {
+  # need package 'zoo' and 'quantreg'
+  library(zoo)
+  library(quantreg) 
+  
   #-----------------------------------------------
   # main function -- BMAR
   #-----------------------------------------------
@@ -22,6 +26,7 @@
   # iterations = 40,000 with 25,000 burnin
   # a = binar search, around 35%
   # df = 5
+  
   BMAR <- function( Data, order = 1){ 
     
     #-----------------------------------------------
@@ -251,4 +256,33 @@
     }
     return(Forecast)
   }
+  
+  BMAR_BIC = function( Data, order, max_order = 20){
+    y = Data
+    size = length(Data)
+    
+    data = matrix( y[(order+1):size], length(y[(order+1):size]),(order+1))
+    name = c('y')  
+    for( j in 1:order){
+      data[,(j+1)] = y[(order+1-j):(size-j)]
+      name = cbind(name, paste('y',j,sep=''))
+    }
+    data = split(data, rep( 1:ncol(data), each = nrow(data)))
+    names(data) = name
+    qar = dynrq(reformulate(name[2:(order+1)], "y"), tau = 0.5, data = data)
+    
+    b = qar$coefficients
+    p = length(b) + 1
+    n = length(qar$y) # adjusted obs
+    
+    # S for \sum | y_t - \hat{y_t} |/2
+    S = sum( abs( qar$residuals) )/2
+    # tau 
+    MAP.tau = S/(n+2) 
+    
+    # likelihood
+    MAP.L = (4*MAP.tau)^(-(size - max_order)) * exp( -MAP.tau^(-1)*sum( abs(qar$residuals[ (1+(max_order-order)):(size - max_order+(max_order-order)) ]))/2)
+    return( log(n)*(p) - 2*log(MAP.L) )
+  }
 }
+
