@@ -24,8 +24,7 @@
   # init_f = 0
   # init_beta = runif(0,1)
   # iterations = 40,000 with 25,000 burnin
-  # a = binar search, around 35%
-  # df = 5
+  # a = binar search, around 35% \pm 10%
   
   BMAR <- function( Data, order = 1){ 
     
