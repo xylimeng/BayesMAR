@@ -120,3 +120,7 @@ for( h in 1:3){ # (h+1)-step ahead prediction
 sqrt(apply((tem - r)^2,2,mean))
 apply( abs(tem - r), 2, mean)
 ```
+
+## Reference
+
+Zijian Zeng and Meng Li (2020). Bayesian Median Autoregression for Robust Time Series Forecasting. <https://arxiv.org/pdf/2001.01116.pdf>
