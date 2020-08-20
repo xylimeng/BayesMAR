@@ -283,7 +283,7 @@
     # S for \sum | y_t - \hat{y_t} |/2
     S = sum( abs( qar$residuals) )/2
     # tau 
-    MAP.tau = S/(n+2) 
+    MAP.tau = S/(n+1) 
     
     # likelihood
     MAP.L = (4*MAP.tau)^(-(size - max_order)) * exp( -MAP.tau^(-1)*sum( abs(qar$residuals[ (1+(max_order-order)):(size - max_order+(max_order-order)) ]))/2)
