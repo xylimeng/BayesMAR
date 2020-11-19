@@ -19,3 +19,7 @@ Data used in real data application, collected on Aug 9th 2018
 
 ## TBR_BayesMAR_forecast.RData
 - preliminary results for demonstration
+
+## CRPS_tem
+- samples to calculate CRPS for BayesMAR-MAP at step #6
+- CRPS for BayesMAR-BMA could be calculated in similar way, while requiring samples at each time point for all order
