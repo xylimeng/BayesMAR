@@ -2,6 +2,10 @@
   # need package 'zoo' and 'quantreg'
   library(zoo)
   library(quantreg) 
+  library(scoringRules)
+  library(plyr)
+  library(rmutil)
+  library(progress)
   
   #-----------------------------------------------
   # main function -- BMAR
