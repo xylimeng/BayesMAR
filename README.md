@@ -119,6 +119,72 @@ for( h in 1:3){ # (h+1)-step ahead prediction
 # RMSE and MAE for BayesMAR_BMA
 sqrt(apply((tem - r)^2,2,mean))
 apply( abs(tem - r), 2, mean)
+
+
+# 6. CRPS
+# CRPS for BayesMAR-MAP
+diffp <- as.matrix(read.csv("diffr.csv"))[,2]
+rt = cbind(diffp[162:196],diffp[163:197],
+           diffp[164:198],diffp[165:199])
+BIC_max = read.csv('BIC_max.csv')[,2:21]
+order = apply(BIC_max, 1 , which.min)[1]
+data_name <- 'diffp'
+f1 = matrix(0,35,15000)
+f2 = matrix(0,35,15000)
+f3 = matrix(0,35,15000)
+f4 = matrix(0,35,15000)
+
+for( i in 1:35){
+  beta = as.matrix(read.csv(paste0('rw_beta_samples_',i,'_order_',order,'.csv'))[,(2:(2+order))])
+  y = get(data_name)[1:(160+i)]
+  # sample tau
+  a = length(y)-order
+  Y = matrix(1,(1+order),(length(y)-order))
+  for( j in 1:order){
+    Y[(1+j),] = y[(160+i-j):(1+order-j)]
+  }
+  true_Y = matrix(rep(y[(160+i):(1+order)],15000), nrow = 15000, byrow = T)
+  b = apply( abs( true_Y - beta%*%Y) ,1,sum)/2
+  tau = matrix(0,15000,1)
+  tau = 1/rgamma(15000,a,b)
+  
+  # f1 
+  Y = matrix(1, 15000, (1+order))
+  fill = matrix( rep( y[(160+i):(160+i-(order)+1)], 15000), nrow = 15000, byrow = T)
+  Y[,2:(1+order)] = fill
+  f1[i,] = apply(beta*Y,1,sum) + rlaplace(15000,0, (2*tau))
+  # f2 
+  fill = cbind(f1[i,], fill)
+  Y[,2:(1+order)] = fill[,1:order]
+  f2[i,] = apply(beta*Y,1,sum) + rlaplace(15000,0, (2*tau))
+  # f3
+  fill = cbind(f2[i,], fill)
+  Y[,2:(1+order)] = fill[,1:order]
+  f3[i,] = apply(beta*Y,1,sum) +  rlaplace(15000,0, (2*tau))
+  # f4 
+  fill = cbind(f3[i,], fill)
+  Y[,2:(1+order)] = fill[,1:order]
+  f4[i,] = apply(beta*Y,1,sum) +  rlaplace(15000,0, (2*tau))
+}
+
+bmarru = matrix(0,35,4)
+bmarrm = matrix(0,35,4)
+bmarrd = matrix(0,35,4)
+
+for( j in 1:4){
+  bmarru[,j] = apply( get(paste0('f',j)), 1, function(x){quantile(x,0.975)})
+  bmarrm[,j] = apply( get(paste0('f',j)), 1, mean)
+  bmarrd[,j] = apply( get(paste0('f',j)), 1, function(x){quantile(x,0.025)})
+}
+
+bmarr_crps = matrix(0, 35, 4)
+for( i in 1:35){
+  for( j in 1:4){
+    dat = get(paste0('f',j))[i,]
+    bmarr_crps[i,j] = crps_sample( y = rt[i,j], dat = dat)
+  }
+}
+bmarr_crps = apply(bmarr_crps,2,mean)
 ```
 
 ## Reference
