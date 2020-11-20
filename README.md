@@ -189,4 +189,4 @@ bmarr_crps = apply(bmarr_crps,2,mean)
 
 ## Reference
 
-Zijian Zeng and Meng Li (2020). Bayesian Median Autoregression for Robust Time Series Forecasting. <https://arxiv.org/pdf/2001.01116.pdf> (Accepted by IJF)
+Zeng, Z. and Li, M. (2020). Bayesian Median Autoregression for Robust Time Series Forecasting. *International Journal of Forecasting*, accepted. <https://arxiv.org/pdf/2001.01116.pdf>
